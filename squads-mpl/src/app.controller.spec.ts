@@ -57,7 +57,24 @@ describe('AppController', () => {
         "test multisig",
       );
 
-      console.log(multiSigAccount);
+      // seems like regenerating wallets for aidrops is limited (error 429).
+      // recommend to use the same wallet for testing (generate a keypair on your own and use that (modify the code) instead of regenerating).
+      expect(multiSigAccount).toStrictEqual({
+        threshold: 2,
+        authorityIndex: 1,
+        transactionIndex: expect.any(Number),
+        msChangeIndex: expect.any(Number),
+        bump: expect.any(Number),
+        createKey: squads.wallet.publicKey,
+        allowExternalExecute: false,
+        keys: expect.arrayContaining([
+          member1.publicKey,
+          member2.publicKey,
+          member3.publicKey,
+          squads.wallet.publicKey,
+        ]),
+        publicKey: expect.any(PublicKey),
+      })
     }, 100000 );
   });
 });
